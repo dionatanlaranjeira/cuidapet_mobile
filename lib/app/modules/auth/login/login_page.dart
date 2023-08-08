@@ -1,90 +1,85 @@
 import 'package:cuidapet/app/core/ui/extensions/size_screen_extension.dart';
+import 'package:cuidapet/app/core/ui/extensions/theme_extensions.dart';
 import 'package:cuidapet/app/core/ui/icons/cuidapet_icons.dart';
 import 'package:cuidapet/app/core/ui/widgets/cuidapet_default_button.dart';
 import 'package:cuidapet/app/core/ui/widgets/cuidapet_textform_field.dart';
 import 'package:cuidapet/app/core/ui/widgets/rounded_button_with_icon.dart';
 import 'package:flutter/material.dart';
+part 'widgets/login_form.dart';
+part 'widgets/login_register_buttons.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-
-  final loginEC = TextEditingController();
-  final passwordEC = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: formKey,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 162.w,
-                height: 130.h,
-                fit: BoxFit.contain,
+              SizedBox(
+                height: 50.h,
+              ),
+              Center(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 162.w,
+                  fit: BoxFit.fill,
+                ),
               ),
               const SizedBox(
-                height: 16,
+                height: 20,
               ),
-              CuidapetTextFormField(
-                label: 'Login',
-                controller: loginEC,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Valor obrigatório';
-                  }
-                  return null;
-                },
-              ),
+              const _LoginForm(),
               const SizedBox(
-                height: 16,
+                height: 20,
               ),
-              CuidapetTextFormField(
-                  label: 'Senha',
-                  controller: passwordEC,
-                  obscureText: true,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Valor obrigatório';
-                    }
-                    return null;
-                  }),
+              const _OrSeparator(),
               const SizedBox(
-                height: 16,
+                height: 8,
               ),
-              CuidapetDefaultButton(
-                onPressed: () {},
-                label: 'Entrar',
-              ),
-              RoundedButtonWithIcon(
-                onTap: () {},
-                width: 200,
-                color: const Color(0XFF3B5999),
-                icon: CuidapetIcons.facebook,
-                label: 'Facebook',
-              ),
-              RoundedButtonWithIcon(
-                onTap: () {},
-                width: 200,
-                color: const Color(0XFFEE5C2E),
-                icon: CuidapetIcons.google,
-                label: 'Google',
-              ),
-              RoundedButtonWithIcon(
-                onTap: () {},
-                width: 200,
-                color: Colors.red,
-                icon: CuidapetIcons.apple,
-                label: 'Apple',
-              ),
+              const _LoginRegisterButtons(),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _OrSeparator extends StatelessWidget {
+  const _OrSeparator({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(
+            thickness: 1,
+            color: context.primaryColor,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'OU',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.sp,
+              color: context.primaryColor,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Divider(
+            thickness: 1,
+            color: context.primaryColor,
+          ),
+        ),
+      ],
     );
   }
 }
