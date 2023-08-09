@@ -31,7 +31,10 @@ class _RegisterFormState extends State<_RegisterForm> {
         const SizedBox(
           height: 20,
         ),
-        CuidapetDefaultButton(onPressed: () {}, label: 'Cadastrar'),
+        CuidapetDefaultButton(
+          onPressed: () {},
+          label: 'Cadastrar',
+        ),
       ],
     ));
   }
