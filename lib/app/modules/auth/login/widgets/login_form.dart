@@ -25,11 +25,6 @@ class _LoginFormState extends State<_LoginForm> {
           CuidapetTextFormField(
             label: 'Senha',
             obscureText: true,
-            // validator: (value) {
-            //   if (condition) {
-                
-            //   }
-            // },
           ),
           SizedBox(
             height: 20.h,
