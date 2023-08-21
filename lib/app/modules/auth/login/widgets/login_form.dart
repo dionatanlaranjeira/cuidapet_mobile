@@ -10,14 +10,30 @@ class _LoginForm extends StatefulWidget {
 final formKey = GlobalKey<FormState>();
 
 class _LoginFormState extends State<_LoginForm> {
+  final controller = Modular.get<LoginController>();
+  final _formKey = GlobalKey<FormState>();
+  final _loginEC = TextEditingController();
+  final _passwordEC = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
+    _loginEC.dispose();
+    _passwordEC.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
+      key: _formKey,
       child: Column(
         children: [
           CuidapetTextFormField(
             label: 'Login',
+            controller: _loginEC,
+            validator: Validatorless.multiple([
+              Validatorless.required('Login obrigatório'),
+              Validatorless.email('Precisa ser um e-mail válido')
+            ]),
           ),
           SizedBox(
             height: 20.h,
@@ -25,13 +41,21 @@ class _LoginFormState extends State<_LoginForm> {
           CuidapetTextFormField(
             label: 'Senha',
             obscureText: true,
+            controller: _passwordEC,
+            validator: Validatorless.multiple([
+              Validatorless.required('Senha obrigatória'),
+              Validatorless.min(6, 'Senha precisa ter 6 caracteres')
+            ]),
           ),
           SizedBox(
             height: 20.h,
           ),
           CuidapetDefaultButton(
-            onPressed: () {
-              formKey.currentState?.validate();
+            onPressed: () async {
+              final formValid = _formKey.currentState?.validate() ?? false;
+              if (formValid) {
+                await controller.login(_loginEC.text, _passwordEC.text);
+              }
             },
             label: 'Entrar',
           ),

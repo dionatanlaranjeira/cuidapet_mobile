@@ -20,6 +20,7 @@ class RoundedButtonWithIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(100),
       onTap: onTap,
       child: Container(
         width: width,
