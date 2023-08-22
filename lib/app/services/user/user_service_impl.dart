@@ -3,6 +3,8 @@
 import 'package:cuidapet/app/core/exceptions/failure.dart';
 import 'package:cuidapet/app/core/exceptions/user_exists_exception.dart';
 import 'package:cuidapet/app/core/exceptions/user_not_exists_exception.dart';
+import 'package:cuidapet/app/core/helpers/constants.dart';
+import 'package:cuidapet/app/core/local_storage/local_storage.dart';
 import 'package:cuidapet/app/core/logger/app_logger.dart';
 import 'package:cuidapet/app/repositories/user/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,10 +13,14 @@ import './user_service.dart';
 class UserServiceImpl implements UserService {
   final UserRepository _userRepository;
   final AppLogger _log;
+  final LocalStorage _localStorage;
+
   UserServiceImpl({
     required AppLogger log,
     required UserRepository userRepository,
-  })  : _log = log,
+    required LocalStorage localStorage,
+  })  : _localStorage = localStorage,
+        _log = log,
         _userRepository = userRepository;
 
   @override
@@ -48,13 +54,18 @@ class UserServiceImpl implements UserService {
         final userCredential = await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
         final userVerified = userCredential.user?.emailVerified ?? false;
+
         if (!userVerified) {
           userCredential.user?.sendEmailVerification();
           Failure(
               message: 'E-mail não confirmado, verifique sua caixa de spam');
         }
 
-        print('E-mail confirmado');
+        final accessToken = await _userRepository.login(email, password);
+        await _saveAccessToken(accessToken);
+        final xx = await _localStorage
+            .read<String>(Constants.LOCAL_STORAGE_ACCESS_TOKEN_KEY);
+        print(xx);
       } else {
         throw Failure(
             message:
@@ -65,4 +76,7 @@ class UserServiceImpl implements UserService {
       throw Failure(message: 'Usuário ou senha inválidos');
     }
   }
+
+  Future<void> _saveAccessToken(String accessToken) => _localStorage
+      .write<String>(Constants.LOCAL_STORAGE_ACCESS_TOKEN_KEY, accessToken);
 }

@@ -20,6 +20,7 @@ class AuthModule extends Module {
           (i) => UserServiceImpl(
             log: i(),
             userRepository: i(),
+            localStorage: i(),
           ),
         ),
       ];
