@@ -15,10 +15,6 @@ class CoreModule extends Module {
           (i) => AuthStore(),
           export: true,
         ),
-        Bind.lazySingleton<RestClient>(
-          (i) => DioRestClient(),
-          export: true,
-        ),
         Bind.lazySingleton<AppLogger>(
           (i) => LoggerAppLoggerImpl(),
           export: true,
@@ -29,6 +25,13 @@ class CoreModule extends Module {
         ),
         Bind.lazySingleton<LocalSecureStorage>(
           (i) => FlutterSecureStorageLocalStorageImpl(),
+          export: true,
+        ),
+        Bind.lazySingleton<RestClient>(
+          (i) => DioRestClient(
+            localStorage: i(),
+            log: i(),
+          ),
           export: true,
         ),
       ];

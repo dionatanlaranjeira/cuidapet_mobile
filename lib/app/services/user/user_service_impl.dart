@@ -6,8 +6,10 @@ import 'package:cuidapet/app/core/exceptions/user_not_exists_exception.dart';
 import 'package:cuidapet/app/core/helpers/constants.dart';
 import 'package:cuidapet/app/core/local_storage/local_storage.dart';
 import 'package:cuidapet/app/core/logger/app_logger.dart';
+import 'package:cuidapet/app/core/rest_client/rest_client.dart';
 import 'package:cuidapet/app/repositories/user/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import './user_service.dart';
 
 class UserServiceImpl implements UserService {
@@ -63,9 +65,7 @@ class UserServiceImpl implements UserService {
 
         final accessToken = await _userRepository.login(email, password);
         await _saveAccessToken(accessToken);
-        final xx = await _localStorage
-            .read<String>(Constants.LOCAL_STORAGE_ACCESS_TOKEN_KEY);
-        print(xx);
+        Modular.get<RestClient>().auth().get('/auth/');
       } else {
         throw Failure(
             message:
