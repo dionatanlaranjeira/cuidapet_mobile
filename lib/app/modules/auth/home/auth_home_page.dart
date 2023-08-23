@@ -24,15 +24,11 @@ class _AuthHomePageState extends State<AuthHomePage> {
   void initState() {
     super.initState();
     reaction<UserModel?>((_) => widget._authStore.userLogged, (userLogger) {
-
       if (userLogger != null && userLogger.email.isNotEmpty) {
-        Modular.to.navigate('/home');
-        
+        Modular.to.navigate('/home/');
       } else {
-        
         Modular.to.navigate('/auth/login/');
       }
-
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
