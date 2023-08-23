@@ -6,23 +6,24 @@ import 'package:cuidapet/app/core/exceptions/user_not_exists_exception.dart';
 import 'package:cuidapet/app/core/helpers/constants.dart';
 import 'package:cuidapet/app/core/local_storage/local_storage.dart';
 import 'package:cuidapet/app/core/logger/app_logger.dart';
-import 'package:cuidapet/app/core/rest_client/rest_client.dart';
 import 'package:cuidapet/app/repositories/user/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import './user_service.dart';
 
 class UserServiceImpl implements UserService {
   final UserRepository _userRepository;
   final AppLogger _log;
   final LocalStorage _localStorage;
+  final LocalSecureStorage _localSecureStore;
 
   UserServiceImpl({
     required AppLogger log,
     required UserRepository userRepository,
     required LocalStorage localStorage,
+    required LocalSecureStorage localSecureStore,
   })  : _localStorage = localStorage,
         _log = log,
+        _localSecureStore = localSecureStore,
         _userRepository = userRepository;
 
   @override
@@ -65,7 +66,7 @@ class UserServiceImpl implements UserService {
 
         final accessToken = await _userRepository.login(email, password);
         await _saveAccessToken(accessToken);
-        Modular.get<RestClient>().auth().get('/auth/');
+        await _confirmLogin();
       } else {
         throw Failure(
             message:
@@ -79,4 +80,11 @@ class UserServiceImpl implements UserService {
 
   Future<void> _saveAccessToken(String accessToken) => _localStorage
       .write<String>(Constants.LOCAL_STORAGE_ACCESS_TOKEN_KEY, accessToken);
+
+  Future<void> _confirmLogin() async {
+    final confirmLoginModel = await _userRepository.confirmLogin();
+    await _saveAccessToken(confirmLoginModel.accessToken);
+    await _localSecureStore.write(Constants.LOCAL_STORAGE_REFRESH_TOKEN_KEY,
+        confirmLoginModel.refreshToken);
+  }
 }
