@@ -3,7 +3,6 @@ import 'package:cuidapet/app/core/local_storage/local_storage.dart';
 import 'package:cuidapet/app/core/logger/app_logger.dart';
 import 'package:cuidapet/app/modules/core/auth/auth_store.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthInterceptor extends Interceptor {
   final LocalStorage _localStorage;

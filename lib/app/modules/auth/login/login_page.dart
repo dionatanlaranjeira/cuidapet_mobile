@@ -4,6 +4,7 @@ import 'package:cuidapet/app/core/ui/icons/cuidapet_icons.dart';
 import 'package:cuidapet/app/core/ui/widgets/cuidapet_default_button.dart';
 import 'package:cuidapet/app/core/ui/widgets/cuidapet_textform_field.dart';
 import 'package:cuidapet/app/core/ui/widgets/rounded_button_with_icon.dart';
+import 'package:cuidapet/app/models/social_login_type.dart';
 import 'package:cuidapet/app/modules/auth/login/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -48,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 8,
               ),
-              const _LoginRegisterButtons(),
+              _LoginRegisterButtons(),
             ],
           ),
         ),
